@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今夜の怖い奇妙な話100選｜アップロード用メタデータ集</title>
+<style>
+  :root{
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --border:rgba(255,255,255,.10);
+    --text:#ffffff; --text-2:#c3c2b7; --text-3:#898781;
+    --accent:#3987e5; --accent-soft:rgba(57,135,229,.14);
+    --red:#e66767; --red-soft:rgba(230,103,103,.14);
+    --good:#3fae5c;
+    --amber:#e2a53f; --amber-soft:rgba(226,165,63,.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--page); color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;
+    line-height:1.6; font-size:14px;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 14px 60px;}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--page); padding:14px 0 10px;
+    border-bottom:1px solid var(--border); margin-bottom:16px;
+  }
+  .badge{display:inline-block; background:var(--accent-soft); color:var(--accent);
+    font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px;}
+  h1{font-size:17px; margin:7px 0 3px;}
+  .sub{color:var(--text-2); font-size:11.5px;}
+
+  .toc{
+    display:flex; flex-wrap:wrap; gap:5px; margin-top:10px;
+  }
+  .toc a{
+    flex:0 0 auto; font-size:10.5px; font-weight:700; color:var(--text-2);
+    background:var(--surface); border:1px solid var(--border); border-radius:999px;
+    padding:3px 9px; text-decoration:none; white-space:nowrap;
+  }
+  .toc a:active, .toc a:hover{color:var(--accent); border-color:var(--accent); background:var(--accent-soft);}
+  .toc a.memo{color:var(--amber); border-color:rgba(226,165,63,.35);}
+  .toc-sep{flex-basis:100%; height:0;}
+
+  .vol{
+    border:1px solid var(--border); border-radius:12px; background:var(--surface);
+    margin-bottom:10px; overflow:hidden; scroll-margin-top:200px;
+  }
+  .vol-group{
+    border:1px solid var(--border); border-radius:12px; background:#151513;
+    margin-bottom:10px; overflow:hidden; scroll-margin-top:200px;
+  }
+  .vol-group > summary{
+    list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px;
+    padding:13px 14px; font-weight:700; font-size:14.5px;
+  }
+  .vol-group > summary::-webkit-details-marker{display:none;}
+  .vol-group > summary .chev{margin-left:auto; color:var(--text-3); transition:transform .15s;}
+  .vol-group[open] > summary .chev{transform:rotate(90deg);}
+  .vol-group > summary .volnum{
+    font-size:11px; font-weight:800; color:var(--accent); background:var(--accent-soft);
+    padding:2px 8px; border-radius:999px; flex-shrink:0;
+  }
+  .vol-group .status{font-size:10.5px; color:var(--text-3); font-weight:400;}
+  .vol-group-content{padding:2px 10px 12px;}
+  .vol-group-content .vol{margin-bottom:8px;}
+  .vol-group-content .vol:last-child{margin-bottom:2px;}
+  .vol > summary{
+    list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px;
+    padding:13px 14px; font-weight:700; font-size:14.5px;
+  }
+  .vol > summary::-webkit-details-marker{display:none;}
+  .vol > summary .chev{margin-left:auto; color:var(--text-3); transition:transform .15s;}
+  .vol[open] > summary .chev{transform:rotate(90deg);}
+  .vol > summary .volnum{
+    font-size:11px; font-weight:800; color:var(--accent); background:var(--accent-soft);
+    padding:2px 8px; border-radius:999px; flex-shrink:0;
+  }
+  .vol .status{font-size:10.5px; color:var(--text-3); font-weight:400;}
+  .vol .status.done{color:var(--good);}
+  .vol .status.pending{color:var(--text-3);}
+
+  .content{padding:0 14px 16px;}
+  .field{margin-top:12px;}
+  .field-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3);
+    margin-bottom:5px; display:flex; align-items:center; justify-content:space-between;
+  }
+  textarea{
+    width:100%; background:#111110; color:var(--text); border:1px solid var(--border);
+    border-radius:8px; padding:10px 11px; font-size:13px; line-height:1.6;
+    font-family:inherit; resize:vertical;
+  }
+  textarea:focus{outline:1px solid var(--accent); border-color:var(--accent);}
+  .copy-btn{
+    border:1px solid var(--border); background:var(--surface); color:var(--text-2);
+    border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer;
+  }
+  .copy-btn:active{background:var(--accent-soft); color:var(--accent); border-color:var(--accent);}
+  .copy-btn.copied{color:var(--good); border-color:var(--good);}
+  .note{
+    background:var(--red-soft); border:1px solid var(--border); border-left:3px solid var(--red);
+    border-radius:8px; padding:9px 11px; font-size:12px; color:var(--text-2); margin-top:14px;
+  }
+  .note b{color:var(--text);}
+  .meta-line{font-size:11.5px; color:var(--text-3); margin-top:10px;}
+
+  .status.watch{color:var(--amber);}
+  .logentry{margin-top:14px; padding-top:12px; border-top:1px dashed var(--border);}
+  .logentry:first-child{margin-top:12px;}
+  .logdate{font-size:11px; font-weight:800; color:var(--amber); background:var(--amber-soft);
+    display:inline-block; padding:2px 8px; border-radius:999px; margin-bottom:8px;}
+  .logbody p{margin:0 0 8px; font-size:13px; color:var(--text-2); line-height:1.7;}
+  .logbody p b{color:var(--text); font-weight:700;}
+  .logbody ul{margin:4px 0 10px; padding-left:19px;}
+  .logbody li{margin-bottom:5px; font-size:13px; color:var(--text-2); line-height:1.6;}
+  .logbody .src{font-size:11px; color:var(--text-3);}
+  .logbody .src a{color:var(--accent); text-decoration:none;}
+  .logbody .src a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">今夜の怖い奇妙な話100選</span>
+    <h1>アップロード用メタデータ集</h1>
+    <div class="sub">各話のタイトル・概要欄・タグをまとめたコピペ用ページです。10話ごとにグループ化されていて、グループ→各話の順にタップで展開します。目次はスクロールしても常に固定表示されます。</div>
+    <nav class="toc">
+      <a href="#group1-10">vol.1〜10</a>
+      <a href="#vol1">1</a>
+      <a href="#vol2">2</a>
+      <a href="#vol3">3</a>
+      <a href="#vol4">4</a>
+      <a href="#vol5">5</a>
+      <a href="#vol6">6</a>
+      <a href="#vol7">7</a>
+      <a href="#vol8">8</a>
+      <a href="#vol9">9</a>
+      <a href="#vol10">10</a>
+      <span class="toc-sep"></span>
+      <a href="#group11-20">vol.11〜20</a>
+      <a href="#vol11">11</a>
+      <a href="#vol12">12</a>
+      <a href="#vol13">13</a>
+      <a href="#vol14">14</a>
+      <a href="#vol15">15</a>
+      <a href="#vol16">16</a>
+      <a href="#vol17">17</a>
+      <a href="#vol18">18</a>
+      <a href="#vol19">19</a>
+      <a href="#vol20">20</a>
+      <span class="toc-sep"></span>
+      <a href="#group21-30">vol.21〜30</a>
+      <a href="#vol21">21</a>
+      <a href="#vol22">22</a>
+      <a href="#vol23">23</a>
+      <a href="#vol24">24</a>
+      <a href="#vol25">25</a>
+      <a href="#vol26">26</a>
+      <a href="#vol27">27</a>
+      <a href="#vol28">28</a>
+      <a href="#vol29">29</a>
+      <a href="#vol30">30</a>
+      <span class="toc-sep"></span>
+      <a href="#memo" class="memo">MEMO</a>
+    </nav>
+  </header>
+
+  <details class="vol-group" id="group1-10">
+    <summary>
+      <span class="volnum">vol.1〜10</span>
+      前半10話
+      <span class="status watch">6話 完パケ済み／4話 挿絵待ち</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="vol-group-content">
+
+  <details class="vol" id="vol1">
+    <summary>
+      <span class="volnum">vol.1</span>
+      旧校舎に響くピアノの音
+      <span class="status done">完パケ済</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="field">
+        <div class="field-label">タイトル <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="2" readonly>【朗読】旧校舎に響くピアノの音｜第一夜</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">概要欄 <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="12" readonly>今夜も、眠れない夜に。
+
+十年前に閉校した旧校舎に、今も響くと噂されるピアノの音――肝試しに訪れた「私」が、そこで体験した忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">タグ（カンマ区切り） <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 旧校舎, ピアノ, 怖い話朗読, 都市伝説朗読</textarea>
+      </div>
+      <div class="meta-line">サムネ：vol1_thumbnail.png（実イラスト・扉の向こうの人影カット）／本編尺：約3分51秒（230.8秒）</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol2">
+    <summary>
+      <span class="volnum">vol.2</span>
+      廃病院の四階
+      <span class="status done">完パケ済</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="field">
+        <div class="field-label">タイトル <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="2" readonly>【朗読】廃病院の四階｜第二夜</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">概要欄 <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="12" readonly>今夜も、眠れない夜に。
+
+十五年前に閉院した総合病院。夜間警備員として働き始めた「私」は、契約で固く禁じられていた四階に、ある夜、明かりを見つけてしまいます――警備員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">タグ（カンマ区切り） <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃病院, 警備員, 怖い話朗読, 都市伝説朗読, 病院の怪談</textarea>
+      </div>
+      <div class="meta-line">サムネ：vol2_thumbnail.png（実イラスト）／本編尺：約8分41秒（520.6秒・ミッドロール広告対応）／冒頭フラッシュバックは瞬間フラッシュ＋パンチインズーム＋手ブレ揺れ＋記憶フリッカーで強化済み（2026-07-29改修）</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol3">
+    <summary>
+      <span class="volnum">vol.3</span>
+      トンネルの気配
+      <span class="status done">完パケ済み</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="field">
+        <div class="field-label">タイトル <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="2" readonly>【朗読】トンネルの気配｜第三夜</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">概要欄 <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="12" readonly>今夜も、眠れない夜に。
+
+深夜専門のタクシー運転手として働く「私」が、山あいの古いトンネルで出会った、後部座席の"お客様"――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">タグ（カンマ区切り） <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, トンネル, タクシー運転手, 怖い話朗読, 都市伝説朗読, 深夜のタクシー</textarea>
+      </div>
+      <div class="meta-line">サムネ：vol3_thumbnail.png（実イラスト）／本編尺：約8分38秒（517.8秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol4">
+    <summary>
+      <span class="volnum">vol.4</span>
+      黒板の一行
+      <span class="status done">完パケ済み</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="field">
+        <div class="field-label">タイトル <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="2" readonly>【朗読】黒板の一行｜第四夜</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">概要欄 <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="12" readonly>今夜も、眠れない夜に。
+
+廃校建築の調査員として、山あいの分校を訪れた「私」。三階の教室の黒板に残された、奇妙な一行の書き込み――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">タグ（カンマ区切り） <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃校, 分校, 黒板, 調査員, 怖い話朗読, 都市伝説朗読</textarea>
+      </div>
+      <div class="meta-line">サムネ：vol4_thumbnail.png（実イラスト）／本編尺：約8分51秒（530.8秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol5">
+    <summary>
+      <span class="volnum">vol.5</span>
+      404号室
+      <span class="status done">完パケ済み</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="field">
+        <div class="field-label">タイトル <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="2" readonly>【朗読】404号室｜第五夜</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">概要欄 <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="12" readonly>今夜も、眠れない夜に。
+
+団地の管理人として働く「私」が、契約上ずっと空き部屋のはずの404号室で体験した、増え続ける小さな靴と、鳴るはずのないインターホンの記憶――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、団地――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">タグ（カンマ区切り） <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 団地, 管理人, インターホン, 怖い話朗読, 都市伝説朗読</textarea>
+      </div>
+      <div class="meta-line">サムネ：vol5_thumbnail.png（実イラスト）／本編尺：約8分51秒（531.5秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol6">
+    <summary>
+      <span class="volnum">vol.6</span>
+      数え声の踏切
+      <span class="status done">完パケ済み</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="field">
+        <div class="field-label">タイトル <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="2" readonly>【朗読】数え声の踏切｜第六夜</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">概要欄 <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="12" readonly>今夜も、眠れない夜に。
+
+夜勤明けに毎晩通る単線の踏切。遮断機の向こうに見える人影の数が、日を追うごとに増えていく――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、団地――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </div>
+      <div class="field">
+        <div class="field-label">タグ（カンマ区切り） <button class="copy-btn" onclick="copyField(this)">コピー</button></div>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 踏切, 夜勤, 人影, 怖い話朗読, 都市伝説朗読</textarea>
+      </div>
+      <div class="meta-line">サムネ：vol6_thumbnail.png（実イラスト）／本編尺：約8分29秒（509.2秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol7">
+    <summary>
+      <span class="volnum">vol.7</span>
+      奥宮の鈴
+      <span class="status watch">台本・音声完成／挿絵発注中</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">神社の巫女バイト／1,997字・507.1秒（8分27秒）／挿絵10枚をvol7_illustration_order.mdで発注済み。挿絵到着後、vol.6と同じ手順（assign_images.py→build_video_real.py→build_hook.py→build_thumbnail_real.py→結合→検証→圧縮）で完パケ予定。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol8">
+    <summary>
+      <span class="volnum">vol.8</span>
+      深夜バスの隣席
+      <span class="status watch">台本・音声完成／挿絵発注中</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">終電後の深夜バスの乗客／2,184字・516.0秒（8分36秒）／挿絵10枚をvol8_illustration_order.mdで発注済み。挿絵到着後、vol.6と同じ手順で完パケ予定。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol9">
+    <summary>
+      <span class="volnum">vol.9</span>
+      三十三歩の地下道
+      <span class="status watch">台本・音声完成／挿絵発注中</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">夜道の近道として使う地下道／2,126字・494.0秒（8分14秒）／挿絵10枚をvol9_illustration_order.mdで発注済み。挿絵到着後、vol.6と同じ手順で完パケ予定。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol10">
+    <summary>
+      <span class="volnum">vol.10</span>
+      306号室の合鍵
+      <span class="status watch">台本・音声完成／挿絵発注中</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">引っ越し先の古いアパート／2,102字・494.7秒（8分15秒）／挿絵10枚をvol10_illustration_order.mdで発注済み。挿絵到着後、vol.6と同じ手順で完パケ予定。</div>
+    </div>
+  </details>
+
+    </div>
+  </details>
+
+  <details class="vol-group" id="group11-20">
+    <summary>
+      <span class="volnum">vol.11〜20</span>
+      台本のみ（全10話）
+      <span class="status pending">TTS・挿絵は未着手</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="vol-group-content">
+
+  <details class="vol" id="vol11">
+    <summary>
+      <span class="volnum">vol.11</span>
+      かたくり荘の203号室
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">山あいの宿の若女将見習い／約1,776字・推定7.3分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol12">
+    <summary>
+      <span class="volnum">vol.12</span>
+      4階のボタン
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">雑居ビルの深夜警備員／約1,822字・推定7.4分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol13">
+    <summary>
+      <span class="volnum">vol.13</span>
+      閉架書庫の一冊
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">大学図書館の夜間司書／約1,900字・推定7.8分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol14">
+    <summary>
+      <span class="volnum">vol.14</span>
+      峠の茶屋の客
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">峠の茶屋を手伝う若者／約1,789字・推定7.3分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol15">
+    <summary>
+      <span class="volnum">vol.15</span>
+      深夜0時の輪転機
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">印刷工場の夜勤作業員／約1,850字・推定7.6分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol16">
+    <summary>
+      <span class="volnum">vol.16</span>
+      離れの十号室
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">老舗温泉旅館の仲居／約1,804字・推定7.4分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol17">
+    <summary>
+      <span class="volnum">vol.17</span>
+      岬の灯台の光
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">岬の灯台管理人／約1,827字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol18">
+    <summary>
+      <span class="volnum">vol.18</span>
+      0号室のナースコール
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">老人ホームの夜勤介護士／約1,968字・推定8.0分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol19">
+    <summary>
+      <span class="volnum">vol.19</span>
+      廻り続けるメリーゴーラウンド
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">廃墟遊園地の夜間管理人／約1,931字・推定7.9分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol20">
+    <summary>
+      <span class="volnum">vol.20</span>
+      誰もいない家への手紙
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">離島の郵便配達員・シリーズ二十話の折り返し回／約1,887字・推定7.7分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+    </div>
+  </details>
+
+    </div>
+  </details>
+
+  <details class="vol-group" id="group21-30">
+    <summary>
+      <span class="volnum">vol.21〜30</span>
+      台本のみ（全10話）
+      <span class="status pending">TTS・挿絵は未着手</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="vol-group-content">
+
+  <details class="vol" id="vol21">
+    <summary>
+      <span class="volnum">vol.21</span>
+      オンエアランプの声
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">深夜ラジオ局の構成作家兼ディレクター／約1,831字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol22">
+    <summary>
+      <span class="volnum">vol.22</span>
+      夜間展示の来園者
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">動物園の夜間飼育員／約1,752字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol23">
+    <summary>
+      <span class="volnum">vol.23</span>
+      山頂駅の増便放送
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">山岳ロープウェイの運行員／約1,828字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol24">
+    <summary>
+      <span class="volnum">vol.24</span>
+      女湯の忘れ物
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">老舗銭湯の三代目店主／約1,746字・推定7.1分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol25">
+    <summary>
+      <span class="volnum">vol.25</span>
+      遺品整理棚の万年筆
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">古書店主／約1,832字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol26">
+    <summary>
+      <span class="volnum">vol.26</span>
+      貫通しないトンネル
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">山岳トンネル工事の夜間警備員／約1,767字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol27">
+    <summary>
+      <span class="volnum">vol.27</span>
+      誰も座らない特等席
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">移動サーカス団の経理係／約1,756字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol28">
+    <summary>
+      <span class="volnum">vol.28</span>
+      競り場の空箱
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">魚市場の競り人見習い／約1,761字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol29">
+    <summary>
+      <span class="volnum">vol.29</span>
+      廃倉庫のシャッター音
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">廃倉庫を巡回する不動産管理員／約1,740字・推定7.1分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol30">
+    <summary>
+      <span class="volnum">vol.30</span>
+      三十件目の相談
+      <span class="status pending">台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">深夜の人生相談ダイヤルのオペレーター・シリーズ三十話の節目回／約1,751字・推定7.1分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+    </div>
+  </details>
+
+    </div>
+  </details>
+
+  <details class="vol" id="memo">
+    <summary>
+      <span class="volnum" style="color:var(--amber);background:var(--amber-soft)">MEMO</span>
+      運営ログ：収益化ポリシー対応（履歴）
+      <span class="status watch">随時更新</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">
+        このチャンネルの構成（AIナレーション＋AIイラスト＋高頻度投稿）はYouTubeの「独自性のないコンテンツ／大量生産」ポリシーの対象になり得るため、調査結果と対応方針をここに時系列で記録する。YouTube側のルールが変わったり、新しい審査結果が出たりした場合は、その都度ここに新しい日付のログを追記していく（古いログは消さずに残す）。
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-29</div>
+        <div class="logbody">
+          <p><b>公式ポリシーの確認内容</b><br>
+          YouTube公式の収益化ポリシーを確認。AIツールの使用率そのものは判定基準ではないと明言されている（「クリエイターがAIツールを使ってストーリーテリングを強化することを歓迎する」）。禁止されているのは、①クリエイター自身の洞察・視点が加わっておらず、②汎用テンプレートで作られ、③「大量生産された」印象を与えるコンテンツ、および④「多数の動画で同様の、独自性のないテンプレートが使われている」ケース。</p>
+          <p><b>外部の実例・分析</b><br>
+          2026年に入り「AIナレーション＋AIイラスト＋毎日投稿」という構成そのものをリスク評価した分析があり、ほぼ同一の構成モデルを「かなり高いリスク」と評価していた（bloomeria.jp）。理由は、毎日投稿という頻度自体が大量生産に見えやすいこと、オープニング・バッジ・SE・尺構成を話間で使い回している点が外形的に「同一テンプレート」に見えること、物語のビート構造（hook→煽り→共感→上がり→落とし→クライマックス→余韻→未来）が毎回同じであること。</p>
+          <p><b>このチャンネルの強み（現状の作り込み）</b><br>
+          TTS音素異常の自動検出・補正、8分尺に収めるための台本の実質的な再構成、シーンごとの秒数計算に基づく挿絵発注、ビート別のトラウマ演出（オーバーレイ・BGM）設計など、1話ごとに相当量の人的な編集判断が既に入っている。これはテンプレ音声にニュース記事を読ませただけの量産型チャンネルとは明確に異なる。</p>
+          <p><b>今後の台本づくりで継続する原則（AI量産判定の回避）</b></p>
+          <ul>
+            <li>話ごとに舞台・時代背景・語り手の属性（学校／病院／警備員／家族など）を意識的に分散させ、「同じ話の焼き直し」に見えないようにする。</li>
+            <li>オチの種類自体にもバリエーションを持たせる（幽霊、人間の悪意、記憶の誤認など、ジャンル内でも多様化する）。</li>
+            <li>冒頭演出・バッジ・SEはコスト効率のため使い回すが、サムネ構図とオープニングの絵柄は話ごとに差分を持たせる。</li>
+            <li>毎日投稿を機械的に固定しない。特に序盤の数話は収益化・審査状況を見ながら投稿ペースを調整できる余地を残す。</li>
+            <li>「改変されたコンテンツ＝はい」のAI利用開示は全話で継続する。</li>
+          </ul>
+          <div class="src">
+            出典：
+            <a href="https://support.google.com/youtube/answer/1311392?hl=ja" target="_blank" rel="noopener">YouTube のチャンネル収益化ポリシー（公式）</a>／
+            <a href="https://www.socialmediatoday.com/news/youtube-clarifies-monetization-update-inauthentic-repeated-content/752892/" target="_blank" rel="noopener">Social Media Today</a>／
+            <a href="https://bloomeria.jp/blog/youtube-ai-slop-demonetization-2026" target="_blank" rel="noopener">bloomeria.jp リスク分析</a>／
+            <a href="https://0115765.com/archives/139015" target="_blank" rel="noopener">0115765.com 解説</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-29（演出設計）</div>
+        <div class="logbody">
+          <p><b>「トラウマ×ジェットコースター」構成への強化を決定</b><br>
+          vol.1〜2は「安心→一度の恐怖の落とし→クライマックス」という単一の山だったが、vol.3から台本のbeat構成に<b>shock</b>（本編クライマックス前の"第一の山"＝ミニ・トラウマ）を追加し、hook→odoshi→shock→agari(安堵)→kyokan(再緊張)→otoshi→climax→afterという、緊張が複数回上下する構成に変更した。演出側(build_video_real.py)もbeatごとの二値(通常/トラウマ)だった処理を、<code>BEAT_INTENSITY</code>という0〜1の連続値に一般化し、オーバーレイ濃度・BGM音量・粒子ノイズ・減光の強さをbeatの強度に応じて段階的に変化させるようにした。</p>
+          <p>この変更は「死ぬほど怖いオリジナルホラーを作っていく」という方針のもとで行ったが、副次的に、上の収益化ログで挙げた「話の構成が毎回同じテンプレートに見える」リスクへの対策にもなっている。各話でトラウマの山の数・配置・オチの種類を変えることで、話ごとの構成に明確な違いを持たせやすくなる。vol.4以降もこの強度ベースの演出システムを標準として使う。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-29（冒頭フラッシュバックの構成統一）</div>
+        <div class="logbody">
+          <p><b>冒頭フラッシュバックを「コマ送りモンタージュ」に統一（vol.1の実際の構成に合わせる修正）</b><br>
+          vol.2の冒頭が「1枚の画像を緩やかにズームするだけ」になっており、vol.1本来の構成（ノイズ画像→物語の場面を複数枚・高速に切り替えるコマ送り→ノイズ画像、というモンタージュ）とズレていたのを修正した。vol.2では挿絵10枚のうち6枚（外観→階段→廊下→ベッド→声の主との遭遇→翌朝の名札）を選び、汎用ノイズ素材（vol.1のnoise_a/noise_b、全巻共通）で前後を挟む構成に統一。1カットあたり0.17〜0.67秒の高速切り替えで、静止画然としない「カット」感を出している。</p>
+          <p>この「ノイズ→物語カット複数枚→ノイズ」という構成を、以後すべての巻で標準の冒頭フラッシュバック方式とする（vol.3のbuild_hook.pyも同方式にあらかじめ統一済み）。新規に用意する画像は増えず、本編用に発注する挿絵の中から6枚を選んで使い回すだけで対応できる。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（ページ構成の整理）</div>
+        <div class="logbody">
+          <p><b>各話を個別プルダウンに統一し、目次を固定表示に変更</b><br>
+          vol.7以降がまとまった一つのブロックになっていたのを、vol.1〜6と同じ形式の個別プルダウン（話数タップで展開）に統一した。あわせてページ上部にチャンネルタイトルと全話の目次を固定表示（スクロールしても常に見える）し、目次から各話へワンタップでジャンプできるようにした。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（グループ化・目次の折り返し表示に変更）</div>
+        <div class="logbody">
+          <p><b>下部のリストを10話ごとにグループ化、目次を横スクロールなしの折り返し表示に変更</b><br>
+          個別プルダウンが全30話分並ぶと下方向のスクロール量が多くなりすぎたため、vol.1〜10／vol.11〜20／vol.21〜30の3グループに再度まとめ、各グループをタップで開くと中に各話の個別プルダウンが並ぶ二段階構成にした。あわせて目次を横スクロール式から折り返し表示に変更し、常に画面内で全項目が見える固定ヘッダーにした。目次のグループ見出し（vol.1〜10など）をタップするとグループごと展開、個別の話数番号をタップすると該当話まで自動でグループごと展開してジャンプする。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（動画タイトル形式の変更）</div>
+        <div class="logbody">
+          <p><b>YouTube動画タイトルからチャンネル名表記を外し、「第◯夜」（漢数字）形式に統一</b><br>
+          これまでの「【朗読】{サブタイトル}｜今夜の怖い奇妙な話100選 vol.{n}」から、「【朗読】{サブタイトル}｜第{漢数字}夜」に変更した。チャンネル名はサムネイルの赤バッジとチャンネルアイコン・チャンネル名表示で既に伝わるため、タイトルでの重複を避けてすっきりさせる狙い。vol.1〜6の完パケ済み分のタイトルは反映済み。vol.7以降は完パケ時に以下の対応表に沿って同形式で登録する。内部の管理用表記（このページの「vol.N」バッジやファイル名）は引き続きvol.Nのまま維持し、YouTube公開用のタイトルのみこの形式にする。</p>
+          <p style="margin-top:10px;"><b>vol.N ⇔ 第◯夜 対応表</b><br>
+          vol.7＝第七夜／vol.8＝第八夜／vol.9＝第九夜／vol.10＝第十夜／vol.11＝第十一夜／vol.12＝第十二夜／vol.13＝第十三夜／vol.14＝第十四夜／vol.15＝第十五夜／vol.16＝第十六夜／vol.17＝第十七夜／vol.18＝第十八夜／vol.19＝第十九夜／vol.20＝第二十夜／vol.21＝第二十一夜／vol.22＝第二十二夜／vol.23＝第二十三夜／vol.24＝第二十四夜／vol.25＝第二十五夜／vol.26＝第二十六夜／vol.27＝第二十七夜／vol.28＝第二十八夜／vol.29＝第二十九夜／vol.30＝第三十夜</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（冒頭フラッシュバックの表記も統一）</div>
+        <div class="logbody">
+          <p><b>冒頭フラッシュバック末尾のタイトルカードも「vol.N」→「第◯夜」表記に変更</b><br>
+          build_title.pyが生成するタイトルカード（本編タイトル文字の下に添える小さいサブ表記）は、これまで「vol.N」を焼き込んでいたが、YouTube動画タイトルの表記統一に合わせて「第◯夜」（漢数字）に変更した。vol.7〜10は挿絵到着後に本編を組み立てる前段階だったため、build_title.pyの該当箇所（"vol.7"〜"vol.10" → "第七夜"〜"第十夜"）を先行して書き換え済み。vol.11以降、illustration_order.md作成時にbuild_title.pyを新規生成する際も、この「第◯夜」表記を標準とする。なお、vol.1〜6はすでに動画として完パケしており、映像への焼き込み済みの「vol.N」表記は今回は変更していない（再レンダリングのコストが大きいため）。サムネイル側（build_thumbnail_real.pyの"vol.N"表記）は今回のご依頼の対象外のため未変更。</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <div class="note">
+    <b>アップロード時に必ず行うこと：</b>YouTube Studioの「詳細を追加」内「改変されたコンテンツ」を必ず「はい」に設定してください。台本・音声・映像・字幕をすべて生成AIで制作しているため必須の開示です（開示した上での収益化自体は問題ありません）。タイトルは「【朗読】{サブタイトル}｜第◯夜」（漢数字・チャンネル名なし）で統一してください。上の「運営ログ」も参照し、AI量産判定を避けるための構成上の原則を各話の台本作成時に確認してください。
+  </div>
+</div>
+
+<script>
+function flashLabel(btn, label, ok){
+  const orig = btn.dataset.orig || btn.textContent;
+  btn.dataset.orig = orig;
+  btn.textContent = label;
+  btn.classList.toggle('copied', !!ok);
+  setTimeout(()=>{ btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+}
+
+function selectAll(ta){
+  ta.focus();
+  ta.select();
+  try { ta.setSelectionRange(0, ta.value.length); } catch(e){}
+}
+
+function copyField(btn){
+  const ta = btn.closest('.field').querySelector('textarea');
+  selectAll(ta);
+
+  // 1) Clipboard API（対応していれば最優先。file://やサンドボックス内では使えないことが多い）
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      flashLabel(btn, 'コピーしました', true);
+    }).catch(()=>{ fallbackCopy(ta, btn); });
+    return;
+  }
+  fallbackCopy(ta, btn);
+}
+
+function fallbackCopy(ta, btn){
+  // 2) execCommand（多くのサンドボックス環境でも動く）
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
+  if (ok) {
+    flashLabel(btn, 'コピーしました', true);
+  } else {
+    // 3) それも使えない環境向け：全選択状態にするので手動でコピーしてもらう
+    selectAll(ta);
+    flashLabel(btn, '選択したので⌘/Ctrl+Cでコピー', false);
+  }
+}
+
+// 目次タップで対象の話（ネストしている場合は親のグループも）を自動展開してからジャンプする
+document.querySelectorAll('.toc a').forEach(function(a){
+  a.addEventListener('click', function(){
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (!el || el.tagName !== 'DETAILS') return;
+    el.open = true;
+    let parent = el.parentElement;
+    while (parent) {
+      if (parent.tagName === 'DETAILS') { parent.open = true; }
+      parent = parent.parentElement;
+    }
+  });
+});
+</script>
+</body>
+</html>
