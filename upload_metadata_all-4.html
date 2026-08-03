@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今夜の怖い奇妙な話100選｜アップロード用メタデータ集</title>
+<style>
+  :root{
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --border:rgba(255,255,255,.10);
+    --text:#ffffff; --text-2:#c3c2b7; --text-3:#898781;
+    --accent:#3987e5; --accent-soft:rgba(57,135,229,.14);
+    --red:#e66767; --red-soft:rgba(230,103,103,.14);
+    --good:#3fae5c;
+    --amber:#e2a53f; --amber-soft:rgba(226,165,63,.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--page); color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;
+    line-height:1.6; font-size:14px;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 14px 60px;}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--page); padding:14px 0 10px;
+    border-bottom:1px solid var(--border); margin-bottom:16px;
+  }
+  .badge{display:inline-block; background:var(--accent-soft); color:var(--accent);
+    font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px;}
+  h1{font-size:17px; margin:7px 0 3px;}
+  .sub{color:var(--text-2); font-size:11.5px;}
+
+  .toc{
+    display:flex; flex-wrap:wrap; gap:5px; margin-top:10px;
+  }
+  .toc a{
+    flex:0 0 auto; font-size:10.5px; font-weight:700; color:var(--text-2);
+    background:var(--surface); border:1px solid var(--border); border-radius:999px;
+    padding:3px 9px; text-decoration:none; white-space:nowrap;
+  }
+  .toc a:active, .toc a:hover{color:var(--accent); border-color:var(--accent); background:var(--accent-soft);}
+  .toc a.memo{color:var(--amber); border-color:rgba(226,165,63,.35);}
+  .toc-sep{flex-basis:100%; height:0;}
+
+  .vol{
+    border:1px solid var(--border); border-radius:12px; background:var(--surface);
+    margin-bottom:10px; overflow:hidden; scroll-margin-top:200px;
+  }
+  .vol-group{
+    border:1px solid var(--border); border-radius:12px; background:#151513;
+    margin-bottom:10px; overflow:hidden; scroll-margin-top:200px;
+  }
+  .vol-group > summary{
+    list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px;
+    padding:13px 14px; font-weight:700; font-size:14.5px;
+  }
+  .vol-group > summary::-webkit-details-marker{display:none;}
+  .vol-group > summary .chev{margin-left:auto; color:var(--text-3); transition:transform .15s;}
+  .vol-group[open] > summary .chev{transform:rotate(90deg);}
+  .vol-group > summary .volnum{
+    font-size:11px; font-weight:800; color:var(--accent); background:var(--accent-soft);
+    padding:2px 8px; border-radius:999px; flex-shrink:0;
+  }
+  .vol-group .status{font-size:10.5px; color:var(--text-3); font-weight:400;}
+  .vol-group-content{padding:2px 10px 12px;}
+  .vol-group-content .vol{margin-bottom:8px;}
+  .vol-group-content .vol:last-child{margin-bottom:2px;}
+  .vol > summary{
+    list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px;
+    padding:13px 14px; font-weight:700; font-size:14.5px;
+  }
+  .vol > summary::-webkit-details-marker{display:none;}
+  .vol > summary .chev{margin-left:auto; color:var(--text-3); transition:transform .15s;}
+  .vol[open] > summary .chev{transform:rotate(90deg);}
+  .vol > summary .volnum{
+    font-size:11px; font-weight:800; color:var(--accent); background:var(--accent-soft);
+    padding:2px 8px; border-radius:999px; flex-shrink:0;
+  }
+  .vol .status{font-size:10.5px; color:var(--text-3); font-weight:400;}
+  .vol .status.done{color:var(--good);}
+  .vol .status.pending{color:var(--text-3);}
+  .vol .postdate{font-size:10.5px; color:var(--text-3); font-weight:400; white-space:nowrap;}
+
+  .content{padding:0 14px 16px;}
+  .field{
+    margin-top:8px; border:1px solid var(--border); border-radius:9px;
+    background:#141412; overflow:hidden;
+  }
+  .field > summary{
+    list-style:none; cursor:pointer; -webkit-tap-highlight-color:transparent;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:9px 8px 9px 11px;
+  }
+  .field > summary::-webkit-details-marker{display:none;}
+  .field > summary::after{
+    content:'▾'; color:var(--text-3); font-size:10px; flex-shrink:0; margin-left:2px;
+    transition:transform .15s;
+  }
+  .field[open] > summary::after{transform:rotate(180deg);}
+  .field-label{
+    display:flex; align-items:center; gap:10px; flex:1; min-width:0;
+  }
+  .field-label > span{
+    font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3);
+    font-weight:700;
+  }
+  .field > div.field-label{padding:10px 11px;} /* コピー欄ではない見出し用フィールド(ボタンなし) */
+  .field textarea{
+    display:block; margin:0 10px 10px; width:calc(100% - 20px);
+    background:#0e0e0d; color:var(--text); border:1px solid var(--border);
+    border-radius:8px; padding:10px 11px; font-size:13px; line-height:1.6;
+    font-family:inherit; resize:vertical;
+  }
+  .field textarea:focus{outline:1px solid var(--accent); border-color:var(--accent);}
+  .copy-btn{
+    border:none; background:var(--accent); color:#fff; font-weight:800;
+    border-radius:7px; padding:6px 15px; font-size:12.5px; cursor:pointer; flex-shrink:0;
+    box-shadow:0 1px 3px rgba(0,0,0,.35);
+  }
+  .copy-btn:active{background:var(--good); color:#fff; box-shadow:none;}
+  .copy-btn.copied{background:var(--good); color:#fff;}
+  .note{
+    background:var(--red-soft); border:1px solid var(--border); border-left:3px solid var(--red);
+    border-radius:8px; padding:9px 11px; font-size:12px; color:var(--text-2); margin-top:14px;
+  }
+  .note b{color:var(--text);}
+  .meta-line{font-size:11.5px; color:var(--text-3); margin-top:10px;}
+
+  .status.watch{color:var(--amber);}
+  .logentry{margin-top:14px; padding-top:12px; border-top:1px dashed var(--border);}
+  .logentry:first-child{margin-top:12px;}
+  .logdate{font-size:11px; font-weight:800; color:var(--amber); background:var(--amber-soft);
+    display:inline-block; padding:2px 8px; border-radius:999px; margin-bottom:8px;}
+  .logbody p{margin:0 0 8px; font-size:13px; color:var(--text-2); line-height:1.7;}
+  .logbody p b{color:var(--text); font-weight:700;}
+  .logbody ul{margin:4px 0 10px; padding-left:19px;}
+  .logbody li{margin-bottom:5px; font-size:13px; color:var(--text-2); line-height:1.6;}
+  .logbody .src{font-size:11px; color:var(--text-3);}
+  .logbody .src a{color:var(--accent); text-decoration:none;}
+  .logbody .src a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">今夜の怖い奇妙な話100選</span>
+    <h1>アップロード用メタデータ集</h1>
+    <div class="sub">各話のタイトル・概要欄・タグをまとめたコピペ用ページです。10話ごとにグループ化されていて、グループ→各話の順にタップで展開します。目次はスクロールしても常に固定表示されます。</div>
+    <nav class="toc">
+      <a href="#group1-10">vol.1〜10</a>
+      <a href="#group11-20">vol.11〜20</a>
+      <a href="#group21-30">vol.21〜30</a>
+      <span class="toc-sep"></span>
+      <a href="#memo" class="memo">MEMO</a>
+    </nav>
+  </header>
+
+  <details class="vol-group" id="group1-10">
+    <summary>
+      <span class="volnum">vol.1〜10</span>
+      前半10話
+      <span class="status done">前半10話 完パケ済み</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="vol-group-content">
+
+  <details class="vol" id="vol1">
+    <summary>
+      <span class="volnum">vol.1</span>
+      旧校舎に響くピアノの音
+      <span class="status done">完パケ済</span>
+      <span class="postdate">📅 2026-08-03</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】旧校舎に響くピアノの音｜第一夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+十年前に閉校した旧校舎に、今も響くと噂されるピアノの音――肝試しに訪れた「私」が、そこで体験した忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 旧校舎, ピアノ, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol1_thumbnail.png（実イラスト・扉の向こうの人影カット）／本編尺：約3分51秒（230.8秒）</div>
+      <div class="meta-line">投稿日：2026-08-03</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-03）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>音楽室の扉の前で、それ以上進めなかった理由 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>音楽室の扉の前で、それ以上進めなかった夜の記録です。
+
+扉の向こうで何が起きたのかは、本編でお確かめください。
+
+▶本編：【朗読】旧校舎に響くピアノの音｜第一夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 旧校舎, 音楽室, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.6秒／ホールド：音楽室の扉のカット（パターンB「接近型」採用）／投稿日：2026-08-03</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol2">
+    <summary>
+      <span class="volnum">vol.2</span>
+      廃病院の四階
+      <span class="status done">完パケ済</span>
+      <span class="postdate">📅 2026-08-04</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】廃病院の四階｜第二夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+十五年前に閉院した総合病院。夜間警備員として働き始めた「私」は、契約で固く禁じられていた四階に、ある夜、明かりを見つけてしまいます――警備員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃病院, 警備員, 怖い話朗読, 都市伝説朗読, 病院の怪談</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol2_thumbnail.png（実イラスト）／本編尺：約8分41秒（520.6秒・ミッドロール広告対応）／冒頭フラッシュバックは瞬間フラッシュ＋パンチインズーム＋手ブレ揺れ＋記憶フリッカーで強化済み（2026-07-29改修）</div>
+      <div class="meta-line">投稿日：2026-08-04</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-04）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>禁じられた四階の病室で、光を見つけてしまった夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>禁じられた四階の病室で、光を見つけてしまった夜の記録です。
+
+その明かりの正体は、本編でお確かめください。
+
+▶本編：【朗読】廃病院の四階｜第二夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃病院, 警備員, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：四階病室のベッドのカット／投稿日：2026-08-04</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol3">
+    <summary>
+      <span class="volnum">vol.3</span>
+      トンネルの気配
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-05</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】トンネルの気配｜第三夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+深夜専門のタクシー運転手として働く「私」が、山あいの古いトンネルで出会った、後部座席の"お客様"――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, トンネル, タクシー運転手, 怖い話朗読, 都市伝説朗読, 深夜のタクシー</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol3_thumbnail.png（実イラスト）／本編尺：約8分38秒（517.8秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+      <div class="meta-line">投稿日：2026-08-05</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-05）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>自宅の玄関に、濡れた足跡が一つだけ残っていた夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>自宅の玄関に、濡れた足跡が一つだけ残っていた夜の記録です。
+
+その足跡の続きは、本編でお確かめください。
+
+▶本編：【朗読】トンネルの気配｜第三夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, トンネル, タクシー運転手, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：玄関の濡れた足跡のカット／投稿日：2026-08-05</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol4">
+    <summary>
+      <span class="volnum">vol.4</span>
+      黒板の一行
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-06</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】黒板の一行｜第四夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+廃校建築の調査員として、山あいの分校を訪れた「私」。三階の教室の黒板に残された、奇妙な一行の書き込み――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃校, 分校, 黒板, 調査員, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol4_thumbnail.png（実イラスト）／本編尺：約8分51秒（530.8秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+      <div class="meta-line">投稿日：2026-08-06</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-06）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>誰もいない教室で、椅子が宙に浮いていた理由 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>誰もいない教室で、椅子が宙に浮いていた夜の記録です。
+
+黒板に映る影の正体は、本編でお確かめください。
+
+▶本編：【朗読】黒板の一行｜第四夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃校, 分校, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：宙に浮く椅子と黒板の影のカット／投稿日：2026-08-06</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol5">
+    <summary>
+      <span class="volnum">vol.5</span>
+      404号室
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-07</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】404号室｜第五夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+団地の管理人として働く「私」が、契約上ずっと空き部屋のはずの404号室で体験した、増え続ける小さな靴と、鳴るはずのないインターホンの記憶――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、団地――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 団地, 管理人, インターホン, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol5_thumbnail.png（実イラスト）／本編尺：約8分51秒（531.5秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+      <div class="meta-line">投稿日：2026-08-07</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-07）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>一足のはずの子供靴が、いつの間にか二足になっていた夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>一足のはずの子供靴が、いつの間にか二足になっていた夜の記録です。
+
+もう一足の持ち主は、本編でお確かめください。
+
+▶本編：【朗読】404号室｜第五夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 団地, 管理人, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：玄関の子供靴二足のカット／投稿日：2026-08-07</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol6">
+    <summary>
+      <span class="volnum">vol.6</span>
+      数え声の踏切
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-08</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】数え声の踏切｜第六夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+夜勤明けに毎晩通る単線の踏切。遮断機の向こうに見える人影の数が、日を追うごとに増えていく――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、団地――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 踏切, 夜勤, 人影, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol6_thumbnail.png（実イラスト）／本編尺：約8分29秒（509.2秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式</div>
+      <div class="meta-line">投稿日：2026-08-08</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-08）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>遮断機の向こうに立つ人影の数が、いつもと違う夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>遮断機の向こうに立つ人影の数が、いつもと違う夜の記録です。
+
+その数の意味は、本編でお確かめください。
+
+▶本編：【朗読】数え声の踏切｜第六夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 踏切, 夜勤, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：踏切に並ぶ人影のカット／投稿日：2026-08-08</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol7">
+    <summary>
+      <span class="volnum">vol.7</span>
+      奥宮の鈴
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-09</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】奥宮の鈴｜第七夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+山あいの小さな神社で夜間警備を兼ねた巫女のアルバイトをしていた「私」。宮司さんから固く禁じられていた「奥宮の鈴」――日没後に鳴らせば「向こうが応える」というその鈴を、ある夜、白い装束の後ろ姿が鳴らすのを見てしまいます――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、神社――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 神社, 巫女, 奥宮, 鈴, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol7_thumbnail.png（実イラスト・奥宮の鈴に伸びる白い手）／本編尺：約8分34秒（514.0秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式・タイトルカード「第七夜」表記</div>
+      <div class="meta-line">投稿日：2026-08-09</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-09）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>禁じられた奥宮の鈴を、白い装束の後ろ姿が鳴らした夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>禁じられた奥宮の鈴を、白い装束の後ろ姿が鳴らした夜の記録です。
+
+その正体は、本編でお確かめください。
+
+▶本編：【朗読】奥宮の鈴｜第七夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 神社, 巫女, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：鈴の綱に伸びる白い手のカット／投稿日：2026-08-09</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol8">
+    <summary>
+      <span class="volnum">vol.8</span>
+      深夜バスの隣席
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-10</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】深夜バスの隣席｜第八夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+出張帰り、深夜発の高速バスに乗った「私」。満席に近い車内で、なぜか最後尾の五人掛けの席だけが空いていました。走り出してすぐ、誰もいないはずの隣の席が沈み、聞いたことのない地名をささやく声が聞こえてきます――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、深夜バス――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 深夜バス, 高速バス, 隣の席, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol8_thumbnail.png（実イラスト・座席に残る濡れたシミ）／本編尺：約8分43秒（522.5秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式・タイトルカード「第八夜」表記／挿絵は9枚受領（shockとotoshiで1枚を共用）</div>
+      <div class="meta-line">投稿日：2026-08-10</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-10）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>誰もいないはずの隣の席が、静かに沈んでいた夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>誰もいないはずの隣の席が、静かに沈んでいた夜の記録です。
+
+そこに座っていたものは、本編でお確かめください。
+
+▶本編：【朗読】深夜バスの隣席｜第八夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 深夜バス, 高速バス, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：座席に残る沈み跡のカット／投稿日：2026-08-10</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol9">
+    <summary>
+      <span class="volnum">vol.9</span>
+      三十三歩の地下道
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-11</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】三十三歩の地下道｜第九夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+駅前の古い地下道を、毎日の通勤路として使っていた「私」。端から端まで「三十三歩」で渡り切れるという近所の言い伝えを、ある夜、実際に数えながら歩いてみると――自分の足音に、もう一つ別の足音が重なっていることに気づきます――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、地下道――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 地下道, 三十三歩, 足音, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol9_thumbnail.png（実イラスト・並んで歩く誰かの足）／本編尺：約8分21秒（500.5秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式・タイトルカード「第九夜」表記／挿絵は10枚受領（1:1でフル対応、使い回しなし）</div>
+      <div class="meta-line">投稿日：2026-08-11</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-11）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>三十三歩のはずの地下道で、足音がもう一つ重なった夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>三十三歩のはずの地下道で、足音がもう一つ重なった夜の記録です。
+
+その足音の主は、本編でお確かめください。
+
+▶本編：【朗読】三十三歩の地下道｜第九夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 地下道, 三十三歩, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：地下道に並ぶ二対の足元のカット／投稿日：2026-08-11</div>
+    </div>
+  </details>
+
+  <details class="vol" id="vol10">
+    <summary>
+      <span class="volnum">vol.10</span>
+      306号室の合鍵
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-12</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】306号室の合鍵｜第十夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+築四十年のアパートに引っ越した「私」。キッチンの引き出しの奥から出てきた、見覚えのない古い合鍵。何の鍵かと調べているうちに、廊下の突き当たりの、ただの壁のはずの場所にその鍵がぴたりと合うことに気づいてしまいます――ある夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、古いアパート――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 合鍵, アパート, 隠し扉, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">サムネ：vol10_thumbnail.png（実イラスト・ノートの手書きの一文「そろそろ、鍵を返してもらう頃だと思う」）／本編尺：約8分21秒（501.2秒・ミッドロール広告対応）／トラウマ×ジェットコースター構成（hook→odoshi→shock→agari→kyokan→otoshi→climax→after→future）／冒頭フラッシュバックはコマ送りモンタージュ方式・タイトルカード「第十夜」表記／挿絵は10枚受領（1:1でフル対応、使い回しなし）</div>
+      <div class="meta-line">投稿日：2026-08-12</div>
+
+      <div class="field" style="margin-top:22px;">
+        <div class="field-label" style="text-transform:none;font-size:13.5px;font-weight:700;color:var(--text);">ショート動画（ティザー・縦型9:16・投稿日：2026-08-12）</div>
+      </div>
+
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>見覚えのないノートに、鍵を返してと書かれていた夜 #shorts</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート 概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>見覚えのないノートに、鍵を返してと書かれていた夜の記録です。
+
+その鍵の持ち主は、本編でお確かめください。
+
+▶本編：【朗読】306号室の合鍵｜第十夜
+
+毎晩20:00更新。都市伝説・怖い話の朗読チャンネルです。
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+#都市伝説 #怖い話 #shorts #怪談 #洒落怖</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>ショート タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 合鍵, アパート, shorts, 怖い話shorts, 都市伝説shorts</textarea>
+      </details>
+      <div class="meta-line">尺：約6.5秒／ホールド：ノートの手書きメモのカット／投稿日：2026-08-12</div>
+    </div>
+  </details>
+
+    </div>
+  </details>
+
+  <details class="vol-group" id="group11-20">
+    <summary>
+      <span class="volnum">vol.11〜20</span>
+      vol.11〜14 完パケ／vol.15〜20 台本のみ
+      <span class="status watch">4話 完パケ済み・6話 台本のみ</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="vol-group-content">
+
+  <details class="vol" id="vol11">
+    <summary>
+      <span class="volnum">vol.11</span>
+      かたくり荘の203号室
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-13</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line">サムネ：vol11_thumbnail.png（実イラスト）／本編尺：約7分54秒（474.2秒）</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】かたくり荘の203号室｜第十一夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+山あいの老舗旅館の若女将見習い。祖母に立ち入りを禁じられた203号室から聞こえる三味線の音を追ううちに、何十年も前に消えた芸妓の記憶に行き着いてしまいます――旅館で体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 旅館, 若女将, 三味線, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿日：2026-08-13（予定・未確定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol12">
+    <summary>
+      <span class="volnum">vol.12</span>
+      4階のボタン
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-14</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line">サムネ：vol12_thumbnail.png（実イラスト）／本編尺：約7分53秒（473.1秒）</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】4階のボタン｜第十二夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+雑居ビルの深夜警備員。先輩から「押していないのに4階で止まることがある」と忠告を受けたエレベーターの異変を追ううちに、旧棟にあったという診療所の記録に行き着いてしまいます――警備員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 雑居ビル, 警備員, エレベーター, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿日：2026-08-14（予定・未確定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol13">
+    <summary>
+      <span class="volnum">vol.13</span>
+      閉架書庫の一冊
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-15</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line">サムネ：vol13_thumbnail.png（実イラスト）／本編尺：約8分14秒（494.2秒）</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】閉架書庫の一冊｜第十三夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+大学図書館の夜間司書。先輩から「絶対に開かないように」と忠告された地下書庫の一冊を開いてしまい、そこには今夜の自分の行動がそのまま書き記されていました――司書として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 図書館, 司書, 閉架書庫, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿日：2026-08-15（予定・未確定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol14">
+    <summary>
+      <span class="volnum">vol.14</span>
+      峠の茶屋の客
+      <span class="status done">完パケ済み</span>
+      <span class="postdate">📅 2026-08-16</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line">サムネ：vol14_thumbnail.png（実イラスト）／本編尺：約8分1秒（480.8秒）</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】峠の茶屋の客｜第十四夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+峠の茶屋を手伝う「私」。祖母から「夜八時過ぎに来るお客さんには代金を受け取らないように」と忠告を受けていたある夜、光の映らない瞳を持つ老人と、初めて言葉を交わしてしまいます――茶屋で体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 峠の茶屋, 老人, 小銭, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿日：2026-08-16（予定・未確定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol15">
+    <summary>
+      <span class="volnum">vol.15</span>
+      深夜0時の輪転機
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-17（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">印刷工場の夜勤作業員／約1,850字・推定7.6分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】深夜0時の輪転機｜第十五夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+築五十年の印刷工場で夜間の機械管理を任された「私」。先輩から「深夜零時になっても、あの古い輪転機の方は絶対に見に行くな」と忠告されていたある夜、電源の切れているはずの機械が確かに動いているのを目にしてしまいます――夜勤で体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 印刷工場, 夜勤, 輪転機, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-17（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol16">
+    <summary>
+      <span class="volnum">vol.16</span>
+      離れの十号室
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-18（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">老舗温泉旅館の仲居／約1,804字・推定7.4分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】離れの十号室｜第十六夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+創業百年を超える老舗温泉旅館の仲居。「十号室の布団だけは、見た通りにそのまま片付けるように」と忠告されていたある朝、誰も泊まっていないはずの部屋の布団が、今までで一番激しく乱れているのを見つけてしまいます――仲居として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 温泉旅館, 仲居, 離れ, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-18（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol17">
+    <summary>
+      <span class="volnum">vol.17</span>
+      岬の灯台の光
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-19（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">岬の灯台管理人／約1,827字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】岬の灯台の光｜第十七夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+岬の灯台管理人。「嵐の夜に沖合の光を見つけても、絶対に灯台の明かりで応えるな」と忠告されていたある嵐の夜、航路のないはずの沖合に、小さな光が浮かんでいるのに気づいてしまいます――灯台守として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 灯台, 灯台守, 岬, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-19（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol18">
+    <summary>
+      <span class="volnum">vol.18</span>
+      0号室のナースコール
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-20（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">老人ホームの夜勤介護士／約1,968字・推定8.0分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】0号室のナースコール｜第十八夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+老人ホームの夜勤介護士。「0号室のナースコールが鳴っても、絶対に一人では向かわないように」と忠告されていたある夜、使われていないはずの部屋の表示灯が、確かに点灯してしまいます――夜勤で体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 老人ホーム, 介護士, ナースコール, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-20（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol19">
+    <summary>
+      <span class="volnum">vol.19</span>
+      廻り続けるメリーゴーラウンド
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-21（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">廃墟遊園地の夜間管理人／約1,931字・推定7.9分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】廻り続けるメリーゴーラウンド｜第十九夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+廃墟遊園地の夜間管理人。「メリーゴーラウンドの音楽が聞こえても、絶対に近づかないように」と忠告されていたある夜、電源の切れているはずの音楽が、確かに響いてきてしまいます――管理人として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃墟遊園地, メリーゴーラウンド, 夜間管理人, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-21（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol20">
+    <summary>
+      <span class="volnum">vol.20</span>
+      誰もいない家への手紙
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-22（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">離島の郵便配達員・シリーズ二十話の折り返し回／約1,887字・推定7.7分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol11-20_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】誰もいない家への手紙｜第二十夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+離島の郵便配達員。「あの家にだけは、手紙を届けても、決してチャイムを鳴らさないように」と局から指示されていたある月、閉め切られているはずの雨戸の隙間から、かすかな灯りが漏れているのに気づいてしまいます――配達員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 離島, 郵便配達員, 誰もいない家, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-22（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+    </div>
+  </details>
+
+  <details class="vol-group" id="group21-30">
+    <summary>
+      <span class="volnum">vol.21〜30</span>
+      台本のみ（全10話）
+      <span class="status pending">TTS・挿絵は未着手</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="vol-group-content">
+
+  <details class="vol" id="vol21">
+    <summary>
+      <span class="volnum">vol.21</span>
+      オンエアランプの声
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-23（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">深夜ラジオ局の構成作家兼ディレクター／約1,831字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】オンエアランプの声｜第二十一夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+深夜ラジオ局の構成作家兼ディレクター。「消灯後に第一スタジオのランプが点いていても、絶対に中を覗かないように」と忠告されていたある夜、電源が落とされているはずのスタジオに、赤いランプが確かに灯っているのを見てしまいます――局員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, ラジオ局, ディレクター, オンエアランプ, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-23（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol22">
+    <summary>
+      <span class="volnum">vol.22</span>
+      夜間展示の来園者
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-24（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">動物園の夜間飼育員／約1,752字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】夜間展示の来園者｜第二十二夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+動物園の夜間飼育員。「閉園後に旧獣舎のあたりで人影を見ても、絶対に声をかけないように」と忠告されていたある夜、誰もいないはずの柵の前に、ぽつんと立つ小さな人影を見つけてしまいます――飼育員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 動物園, 飼育員, 夜間展示, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-24（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol23">
+    <summary>
+      <span class="volnum">vol.23</span>
+      山頂駅の増便放送
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-25（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">山岳ロープウェイの運行員／約1,828字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】山頂駅の増便放送｜第二十三夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+山岳ロープウェイの運行員。「終電後に増便のアナウンスが流れても、絶対にゴンドラを動かさないように」と忠告されていたある霧の夜、電源を切ったはずのスピーカーから、聞き覚えのある発車アナウンスが流れ始めてしまいます――運行員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, ロープウェイ, 山頂駅, 運行員, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-25（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol24">
+    <summary>
+      <span class="volnum">vol.24</span>
+      女湯の忘れ物
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-26（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">老舗銭湯の三代目店主／約1,746字・推定7.1分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】女湯の忘れ物｜第二十四夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+祖父の代から続く老舗銭湯の三代目。「女湯のあの棚の忘れ物だけは、絶対に処分しないように」と忠告されていたある夜、誰もいないはずの女湯から、かすかに湯を使う水音が聞こえてきてしまいます――番台として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 銭湯, 女湯, 番台, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-26（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol25">
+    <summary>
+      <span class="volnum">vol.25</span>
+      遺品整理棚の万年筆
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-27（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">古書店主／約1,832字・推定7.5分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】遺品整理棚の万年筆｜第二十五夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+祖父の代から続く古書店主。「レジ近くのあの薄い本だけは、絶対に開いて読まないように」と忠告されていたある夜、遺品整理で買い取った私家版の本が、古い万年筆の筆跡で今夜の自分の行動を書き記しているのを見てしまいます――古書店主として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 古書店, 私家版, 万年筆, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-27（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol26">
+    <summary>
+      <span class="volnum">vol.26</span>
+      貫通しないトンネル
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-28（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">山岳トンネル工事の夜間警備員／約1,767字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】貫通しないトンネル｜第二十六夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+山岳トンネル工事の夜間警備員。「トンネルの奥から削岩機のような音が聞こえても、絶対に奥まで確認しに行かないように」と忠告されていたある夜、機材はすべて停止させてあるはずの奥から、規則正しい削岩機の音と小さな火花のようなものを目にしてしまいます――警備員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, トンネル工事, 削岩機, 警備員, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-28（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol27">
+    <summary>
+      <span class="volnum">vol.27</span>
+      誰も座らない特等席
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-29（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">移動サーカス団の経理係／約1,756字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】誰も座らない特等席｜第二十七夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+移動サーカス団の経理係。「特等席の一番端の一枚だけは、絶対に他のお客様に案内しないように」と忠告されていたある夜、誰も座っていないはずのその席の椅子が、わずかに沈んでいるのを見てしまいます――経理係として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, サーカス, 特等席, 経理係, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-29（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol28">
+    <summary>
+      <span class="volnum">vol.28</span>
+      競り場の空箱
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-30（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">魚市場の競り人見習い／約1,761字・推定7.2分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】競り場の空箱｜第二十八夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+魚市場の競り人見習い。「隅に置いてあるあの箱だけは、絶対に蓋を開けないように」と忠告されていたある朝、誰も触れていないはずの蓋が、かすかに動いているのに気づいてしまいます――競り人見習いとして体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 魚市場, 競り人, 空箱, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-30（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol29">
+    <summary>
+      <span class="volnum">vol.29</span>
+      廃倉庫のシャッター音
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-08-31（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">廃倉庫を巡回する不動産管理員／約1,740字・推定7.1分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】廃倉庫のシャッター音｜第二十九夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+山中の廃倉庫を巡回する不動産管理員。「シャッターの開閉音が聞こえても、絶対に奥までは確認しに行かないように」と忠告されていたある夜、電源の切れているはずのシャッターが、ひとりでに開いていくのを見てしまいます――管理員として体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 廃倉庫, シャッター, 不動産管理員, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-08-31（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+
+  <details class="vol" id="vol30">
+    <summary>
+      <span class="volnum">vol.30</span>
+      三十件目の相談
+      <span class="status pending">台本のみ</span>
+      <span class="postdate">📅 2026-09-01（予定）</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">深夜の人生相談ダイヤルのオペレーター・シリーズ三十話の節目回／約1,751字・推定7.1分／tts_synth.py生成・構文確認済み（TTS実合成・挿絵は未着手）。まとめ台本集：vol21-30_scripts.md。</div>
+      <details class="field">
+        <summary class="field-label">
+          <span>タイトル</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="2" readonly>【朗読】三十件目の相談｜第三十夜</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>概要欄</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>今夜も、眠れない夜に。
+
+深夜の人生相談ダイヤルのオペレーター。「三十件目の電話の相談者には、絶対に名前を尋ねないように」と忠告されていた、非通知でかかってくるその電話に、シリーズ三十話の節目の夜、また出てしまいます――オペレーターとして体験した、忘れられない一夜の記憶です。
+
+都市伝説・怪談・ヒトコワ・洒落怖――ぞくぞくする話を毎晩お届けする朗読チャンネルです。学校、病院、トンネル、山の分校――日常のすぐそばに潜む、少し不気味で忘れられない物語を、静かな声で語ります。作業用・睡眠用としてもどうぞ。
+
+本チャンネルの台本・音声・映像は生成AIを使用して制作しています。
+
+新しい物語は【毎晩20:00】更新予定。チャンネル登録して、次の夜をお待ちください。
+
+#都市伝説 #怖い話 #朗読 #怪談 #睡眠用bgm</textarea>
+      </details>
+      <details class="field">
+        <summary class="field-label">
+          <span>タグ（カンマ区切り）</span>
+          <button class="copy-btn" onclick="event.preventDefault(); event.stopPropagation(); copyField(this)">コピー</button>
+        </summary>
+        <textarea rows="3" readonly>都市伝説, 怖い話, 朗読, 睡眠用, 作業用, 怪談, ヒトコワ, 洒落怖, ホラー, 今夜の怖い奇妙な話100選, 人生相談, オペレーター, 電話, 怖い話朗読, 都市伝説朗読</textarea>
+      </details>
+      <div class="meta-line">投稿予定日：2026-09-01（毎日20:00ペース継続を想定した暫定予定）</div>
+    </div>
+  </details>
+
+    </div>
+  </details>
+
+  <details class="vol" id="memo">
+    <summary>
+      <span class="volnum" style="color:var(--amber);background:var(--amber-soft)">MEMO</span>
+      運営ログ：収益化ポリシー対応（履歴）
+      <span class="status watch">随時更新</span>
+      <span class="chev">›</span>
+    </summary>
+    <div class="content">
+      <div class="meta-line" style="margin-top:0;">
+        このチャンネルの構成（AIナレーション＋AIイラスト＋高頻度投稿）はYouTubeの「独自性のないコンテンツ／大量生産」ポリシーの対象になり得るため、調査結果と対応方針をここに時系列で記録する。YouTube側のルールが変わったり、新しい審査結果が出たりした場合は、その都度ここに新しい日付のログを追記していく（古いログは消さずに残す）。
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-29</div>
+        <div class="logbody">
+          <p><b>公式ポリシーの確認内容</b><br>
+          YouTube公式の収益化ポリシーを確認。AIツールの使用率そのものは判定基準ではないと明言されている（「クリエイターがAIツールを使ってストーリーテリングを強化することを歓迎する」）。禁止されているのは、①クリエイター自身の洞察・視点が加わっておらず、②汎用テンプレートで作られ、③「大量生産された」印象を与えるコンテンツ、および④「多数の動画で同様の、独自性のないテンプレートが使われている」ケース。</p>
+          <p><b>外部の実例・分析</b><br>
+          2026年に入り「AIナレーション＋AIイラスト＋毎日投稿」という構成そのものをリスク評価した分析があり、ほぼ同一の構成モデルを「かなり高いリスク」と評価していた（bloomeria.jp）。理由は、毎日投稿という頻度自体が大量生産に見えやすいこと、オープニング・バッジ・SE・尺構成を話間で使い回している点が外形的に「同一テンプレート」に見えること、物語のビート構造（hook→煽り→共感→上がり→落とし→クライマックス→余韻→未来）が毎回同じであること。</p>
+          <p><b>このチャンネルの強み（現状の作り込み）</b><br>
+          TTS音素異常の自動検出・補正、8分尺に収めるための台本の実質的な再構成、シーンごとの秒数計算に基づく挿絵発注、ビート別のトラウマ演出（オーバーレイ・BGM）設計など、1話ごとに相当量の人的な編集判断が既に入っている。これはテンプレ音声にニュース記事を読ませただけの量産型チャンネルとは明確に異なる。</p>
+          <p><b>今後の台本づくりで継続する原則（AI量産判定の回避）</b></p>
+          <ul>
+            <li>話ごとに舞台・時代背景・語り手の属性（学校／病院／警備員／家族など）を意識的に分散させ、「同じ話の焼き直し」に見えないようにする。</li>
+            <li>オチの種類自体にもバリエーションを持たせる（幽霊、人間の悪意、記憶の誤認など、ジャンル内でも多様化する）。</li>
+            <li>冒頭演出・バッジ・SEはコスト効率のため使い回すが、サムネ構図とオープニングの絵柄は話ごとに差分を持たせる。</li>
+            <li>毎日投稿を機械的に固定しない。特に序盤の数話は収益化・審査状況を見ながら投稿ペースを調整できる余地を残す。</li>
+            <li>「改変されたコンテンツ＝はい」のAI利用開示は全話で継続する。</li>
+          </ul>
+          <div class="src">
+            出典：
+            <a href="https://support.google.com/youtube/answer/1311392?hl=ja" target="_blank" rel="noopener">YouTube のチャンネル収益化ポリシー（公式）</a>／
+            <a href="https://www.socialmediatoday.com/news/youtube-clarifies-monetization-update-inauthentic-repeated-content/752892/" target="_blank" rel="noopener">Social Media Today</a>／
+            <a href="https://bloomeria.jp/blog/youtube-ai-slop-demonetization-2026" target="_blank" rel="noopener">bloomeria.jp リスク分析</a>／
+            <a href="https://0115765.com/archives/139015" target="_blank" rel="noopener">0115765.com 解説</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-29（演出設計）</div>
+        <div class="logbody">
+          <p><b>「トラウマ×ジェットコースター」構成への強化を決定</b><br>
+          vol.1〜2は「安心→一度の恐怖の落とし→クライマックス」という単一の山だったが、vol.3から台本のbeat構成に<b>shock</b>（本編クライマックス前の"第一の山"＝ミニ・トラウマ）を追加し、hook→odoshi→shock→agari(安堵)→kyokan(再緊張)→otoshi→climax→afterという、緊張が複数回上下する構成に変更した。演出側(build_video_real.py)もbeatごとの二値(通常/トラウマ)だった処理を、<code>BEAT_INTENSITY</code>という0〜1の連続値に一般化し、オーバーレイ濃度・BGM音量・粒子ノイズ・減光の強さをbeatの強度に応じて段階的に変化させるようにした。</p>
+          <p>この変更は「死ぬほど怖いオリジナルホラーを作っていく」という方針のもとで行ったが、副次的に、上の収益化ログで挙げた「話の構成が毎回同じテンプレートに見える」リスクへの対策にもなっている。各話でトラウマの山の数・配置・オチの種類を変えることで、話ごとの構成に明確な違いを持たせやすくなる。vol.4以降もこの強度ベースの演出システムを標準として使う。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-29（冒頭フラッシュバックの構成統一）</div>
+        <div class="logbody">
+          <p><b>冒頭フラッシュバックを「コマ送りモンタージュ」に統一（vol.1の実際の構成に合わせる修正）</b><br>
+          vol.2の冒頭が「1枚の画像を緩やかにズームするだけ」になっており、vol.1本来の構成（ノイズ画像→物語の場面を複数枚・高速に切り替えるコマ送り→ノイズ画像、というモンタージュ）とズレていたのを修正した。vol.2では挿絵10枚のうち6枚（外観→階段→廊下→ベッド→声の主との遭遇→翌朝の名札）を選び、汎用ノイズ素材（vol.1のnoise_a/noise_b、全巻共通）で前後を挟む構成に統一。1カットあたり0.17〜0.67秒の高速切り替えで、静止画然としない「カット」感を出している。</p>
+          <p>この「ノイズ→物語カット複数枚→ノイズ」という構成を、以後すべての巻で標準の冒頭フラッシュバック方式とする（vol.3のbuild_hook.pyも同方式にあらかじめ統一済み）。新規に用意する画像は増えず、本編用に発注する挿絵の中から6枚を選んで使い回すだけで対応できる。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（ページ構成の整理）</div>
+        <div class="logbody">
+          <p><b>各話を個別プルダウンに統一し、目次を固定表示に変更</b><br>
+          vol.7以降がまとまった一つのブロックになっていたのを、vol.1〜6と同じ形式の個別プルダウン（話数タップで展開）に統一した。あわせてページ上部にチャンネルタイトルと全話の目次を固定表示（スクロールしても常に見える）し、目次から各話へワンタップでジャンプできるようにした。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（グループ化・目次の折り返し表示に変更）</div>
+        <div class="logbody">
+          <p><b>下部のリストを10話ごとにグループ化、目次を横スクロールなしの折り返し表示に変更</b><br>
+          個別プルダウンが全30話分並ぶと下方向のスクロール量が多くなりすぎたため、vol.1〜10／vol.11〜20／vol.21〜30の3グループに再度まとめ、各グループをタップで開くと中に各話の個別プルダウンが並ぶ二段階構成にした。あわせて目次を横スクロール式から折り返し表示に変更し、常に画面内で全項目が見える固定ヘッダーにした。目次のグループ見出し（vol.1〜10など）をタップするとグループごと展開、個別の話数番号をタップすると該当話まで自動でグループごと展開してジャンプする。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（動画タイトル形式の変更）</div>
+        <div class="logbody">
+          <p><b>YouTube動画タイトルからチャンネル名表記を外し、「第◯夜」（漢数字）形式に統一</b><br>
+          これまでの「【朗読】{サブタイトル}｜今夜の怖い奇妙な話100選 vol.{n}」から、「【朗読】{サブタイトル}｜第{漢数字}夜」に変更した。チャンネル名はサムネイルの赤バッジとチャンネルアイコン・チャンネル名表示で既に伝わるため、タイトルでの重複を避けてすっきりさせる狙い。vol.1〜6の完パケ済み分のタイトルは反映済み。vol.7以降は完パケ時に以下の対応表に沿って同形式で登録する。内部の管理用表記（このページの「vol.N」バッジやファイル名）は引き続きvol.Nのまま維持し、YouTube公開用のタイトルのみこの形式にする。</p>
+          <p style="margin-top:10px;"><b>vol.N ⇔ 第◯夜 対応表</b><br>
+          vol.7＝第七夜／vol.8＝第八夜／vol.9＝第九夜／vol.10＝第十夜／vol.11＝第十一夜／vol.12＝第十二夜／vol.13＝第十三夜／vol.14＝第十四夜／vol.15＝第十五夜／vol.16＝第十六夜／vol.17＝第十七夜／vol.18＝第十八夜／vol.19＝第十九夜／vol.20＝第二十夜／vol.21＝第二十一夜／vol.22＝第二十二夜／vol.23＝第二十三夜／vol.24＝第二十四夜／vol.25＝第二十五夜／vol.26＝第二十六夜／vol.27＝第二十七夜／vol.28＝第二十八夜／vol.29＝第二十九夜／vol.30＝第三十夜</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-30（冒頭フラッシュバックの表記も統一）</div>
+        <div class="logbody">
+          <p><b>冒頭フラッシュバック末尾のタイトルカードも「vol.N」→「第◯夜」表記に変更</b><br>
+          build_title.pyが生成するタイトルカード（本編タイトル文字の下に添える小さいサブ表記）は、これまで「vol.N」を焼き込んでいたが、YouTube動画タイトルの表記統一に合わせて「第◯夜」（漢数字）に変更した。vol.7〜10は挿絵到着後に本編を組み立てる前段階だったため、build_title.pyの該当箇所（"vol.7"〜"vol.10" → "第七夜"〜"第十夜"）を先行して書き換え済み。vol.11以降、illustration_order.md作成時にbuild_title.pyを新規生成する際も、この「第◯夜」表記を標準とする。なお、vol.1〜6はすでに動画として完パケしており、映像への焼き込み済みの「vol.N」表記は今回は変更していない（再レンダリングのコストが大きいため）。サムネイル側（build_thumbnail_real.pyの"vol.N"表記）は今回のご依頼の対象外のため未変更。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-31（vol.7完パケ／作業環境のディスク容量に関する運用メモ）</div>
+        <div class="logbody">
+          <p><b>vol.7「奥宮の鈴」完パケ</b><br>
+          届いた挿絵10枚をassign_images.py→build_video_real.py→build_title.py（第七夜表記）→build_hook.py→build_thumbnail_real.pyの順で処理し、本編507.4秒＋冒頭フラッシュバック6.6秒＝計514.0秒で結合・検証（デコード確認・faststart確認）・圧縮まで完了。サムネはimg08（奥宮の鈴に伸びる白い手）を使用。</p>
+          <p><b>制作環境のディスク容量枯渇と対応</b><br>
+          vol.7の字幕焼き込み処理の途中で、これまでのvol.1〜6制作で溜まっていた中間キャッシュ動画（各話のwork_realフォルダ内のセグメント別mp4、計1000ファイル超）が原因で作業ディスクの空き容量が枯渇し、処理が一時停止した。既に完パケ・納品済みのvol.2〜6の中間キャッシュを削除して容量を確保し、vol.7の処理を再開・完走させた（セグメント単体のレンダリング結果はキャッシュされていたため、字幕焼き込み以降のステップから再開でき、大きな手戻りは発生していない）。今後は、各話の完パケ・納品が確定した時点で、その話のwork_real／workフォルダを都度削除する運用に切り替え、同様の容量枯渇を予防する。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-07-31（vol.8完パケ／ショート動画の試作）</div>
+        <div class="logbody">
+          <p><b>vol.8「深夜バスの隣席」完パケ</b><br>
+          挿絵は10枚オーダーに対し9枚到着。shock（隣の座席の気配）とotoshi（再び最後尾に座る緊張）の2箇所には、内容が近い1枚（バス車内で手を握りしめる緊張のカット）を共用して割り当てた。本編515.97秒＋冒頭フラッシュバック6.6秒＝計522.5秒で結合・検証・圧縮まで完了。サムネはimg08（座席に残る濡れたシミ）を使用。</p>
+          <p><b>ショート動画（縦型9:16）の試作を開始</b><br>
+          本編vol.7の素材を使って切り抜きショートを試作。既存の横長挿絵をそのまま縦クロップ＋ズームすると被写体が不自然に引き伸ばされる問題が発生し、①9:16へのカバークロップを先に行ってからズームをかける、②冒頭2秒に赤枠チャンネルタイトルカード→ノイズ遷移→本編、という2点を標準テンプレートとして確立した。今後は本編用（横長16:9）とは別に、ショート専用の縦構図挿絵（1話あたり5枚目安）を都度発注する運用とし、第一夜分のオーダーシートを作成済み。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-01（vol.9完パケ）</div>
+        <div class="logbody">
+          <p><b>vol.9「三十三歩の地下道」完パケ</b><br>
+          届いた挿絵10枚を1:1でフル対応（使い回しなし）。assign_images.py→build_video_real.py→build_title.py（第九夜表記）→build_hook.py→build_thumbnail_real.pyの順で処理し、本編493.97秒＋冒頭フラッシュバック6.6秒＝計500.5秒で結合・検証（デコード確認・faststart確認）・圧縮まで完了。サムネはimg08（並んで歩く誰かの足）を使用。処理完了後、vol9/work_realとvol9/workのキャッシュは削除済み。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-01（vol.10完パケ／前半10話が全話完了）</div>
+        <div class="logbody">
+          <p><b>vol.10「306号室の合鍵」完パケ</b><br>
+          届いた挿絵10枚を1:1でフル対応（使い回しなし）。assign_images.py→build_video_real.py→build_title.py（第十夜表記）→build_hook.py→build_thumbnail_real.pyの順で処理し、本編494.67秒＋冒頭フラッシュバック6.6秒＝計501.2秒で結合・検証（デコード確認・faststart確認）・圧縮まで完了。サムネはimg08（ノートの手書きの一文「そろそろ、鍵を返してもらう頃だと思う」）を使用。処理完了後、vol10/work_realとvol10/workのキャッシュは削除済み。</p>
+          <p><b>前半vol.1〜10が全話完パケ</b><br>
+          これで前半10話すべての本編動画・サムネイル・アップロード用メタデータが揃った。次はvol.11〜30（台本のみ完成済み）のTTS実合成・挿絵発注、およびショート動画スピンオフの本格運用が今後の作業範囲になる。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-01（vol.11〜14 TTS実合成／挿絵オーダーシート発注）</div>
+        <div class="logbody">
+          <p><b>vol.11〜14のTTS実合成が完了</b><br>
+          これまで台本（tts_synth.py）のみだったvol.11〜14について、open_jtalkでの実合成を実行し、combined.wav・segments.jsonを生成（本編尺：vol.11=428.9秒／vol.12=427.9秒／vol.13=447.3秒／vol.14=434.9秒）。異常長音素の自動補正も全話で適用済み。</p>
+          <p><b>挿絵オーダーシート4本を新規作成</b><br>
+          segments.jsonの実測シーン尺をもとに、vol.9/vol.10と同じ「本編10枚（hook/odoshi/shock/agari/kyokan-A/kyokan-B/otoshi/climax/after-A/after-B+future）」構成でvol11〜14_illustration_order.mdを作成。各話のassign_images.pyもセグメント番号ベースで先行準備済みのため、挿絵到着後はすぐに完パケ作業に入れる。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-01（ティザー型ショート方式を確定／vol.1で本運用初適用）</div>
+        <div class="logbody">
+          <p><b>ショート動画の方針を「切り抜き」から「ティザー予告編」に転換</b><br>
+          本編の一部をそのまま切り抜く方式は「ぞくぞくする怖さがない」とのフィードバックを受け、内容を伏せて断片フラッシュ＋静寂＋ジョルト＋ラストのタイトル刻印だけで見せる「found-footage予告編」形式（クローバーフィールド／ブレアウィッチ的な引き）に全面転換した。共通ライブラリteaser_lib.pyを新設し、1話につき画像・SEの異なる3パターンを標準セットとして量産する運用を確立（以後、長編1本につき必ずティザー3本を作る）。</p>
+          <p><b>音声設計を大幅に簡素化</b><br>
+          当初はドローン・SE・囁き声を重ねる作り込みをしていたが、「うるさい／声が聞こえない」との指摘を受けて全廃。原因はffmpeg amixのデフォルト正規化（入力数で自動的に音量が1/Nされる仕様）で音量設定が意図通りに反映されていなかったためnormalize=0に修正した上で、最終的には本編中を完全無音にし、ラストのタイトル刻印の瞬間だけ「ザザッ」というノイズを1発鳴らす構成に落ち着いた。SEキャラクター（breathing/heartbeat/corrupt）はこのノイズの質感とタイトルカードの色収差エフェクトだけで差をつけている。</p>
+          <p><b>vol.1（第一夜）にティザー3パターンを初適用</b><br>
+          本編用の実イラスト（main_assets、16:9・PNG）をそのまま流用。素材が本編の演出上かなり暗く作られていた（平均輝度が全体の4〜7%程度）ため、そのままだとホールド／フラッシュ画像がほぼ真っ黒になる問題が発生し、挿絵側にだけ事前ガンマ補正（gamma=2.0）をかける仕組みをteaser_lib.pyに追加して解決。A「気配型」＝終わらない階段、B「接近型」＝音楽室の扉、C「痕跡型」＝ピアノ鍵盤アップ、をそれぞれホールドの核にした3パターンを完成させた。</p>
+          <p><b>vol.1本編＋ショート3本の投稿日を2026-08-03に設定</b><br>
+          上記のメタデータ欄に本編・ショートA/B/C各々のタイトル・概要欄・タグのコピペ欄と投稿日を追記した。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-01（ショート運用を「1話3本」から「1話1本」へ方針転換）</div>
+        <div class="logbody">
+          <p><b>「1話につきティザー3本」を撤回</b><br>
+          3パターン制作・比較したうえで、画像とSEの違いだけのバリエーションは実質的な効果差が薄く「作り手の自己満足」に留まると判断。あわせて、YouTubeの反復・大量生産コンテンツ（inauthentic content）ポリシーはチャンネル単位で審査され、同一構成・差分が挿絵とSEだけの動画を機械的に量産すると収益化リスクになり得る点も踏まえ、以後は長編1本につきティザーショートは1本のみ制作する運用に変更した。</p>
+          <p><b>vol.1のショートをB「接近型」（音楽室の扉）1本に統一</b><br>
+          A「気配型」・C「痕跡型」はお蔵入りとし、メタデータ欄からも削除。B案はホールドが「音楽室」の看板ごと写った扉のカットで、クライマックス（扉の向こう＝祖母の声）に一番直結しているため採用。タイトル・概要欄・タグの欄も「ショートA/B/C」の3系統から「ショート」1系統に統合した。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-01（vol.2〜5のショートを1話1本方針で量産／HTMLを全話反映）</div>
+        <div class="logbody">
+          <p><b>「1話1本編＋1ショート」の毎日投稿ペースを確定し、vol.2〜5のショートを制作</b><br>
+          各話の本編内容（segments.json）と挿絵の明度を確認したうえで、話ごとにホールド核となる1カットを選定：vol.2「廃病院の四階」＝四階病室のベッド（SE：breathing）、vol.3「トンネルの気配」＝玄関に浮かぶ濡れた足跡（SE：corrupt）、vol.4「黒板の一行」＝宙に浮く椅子と黒板の影（SE：heartbeat）、vol.5「404号室」＝玄関に並ぶ子供靴2足（SE：breathing）。いずれも素材の暗さに応じてgammaパラメータ（1.3〜1.6）を個別調整し、ホールド画像が真っ黒に潰れないよう補正した。全4本とも1080x1920・約6.5秒でビルドし、ホールド／タイトルフレームを目視確認、CRF24でエンコードしfaststart化した上で書き出し済み。</p>
+          <p><b>本編投稿日を1日1話ペースで設定、ショート動画の欄を全話追加</b><br>
+          vol.1（2026-08-03）に続けて、vol.2＝08-04、vol.3＝08-05、vol.4＝08-06、vol.5＝08-07として本編投稿日を追記。あわせてvol.2〜5それぞれに、vol.1と同じ形式（プルダウン化されたタイトル／概要欄／タグのコピペ欄＋ホールド内容と投稿日を記載したmeta-line）でショート動画セクションを追加した。投稿日は確定情報ではなく暫定の割り振りのため、実際のスケジュールに応じて要調整。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-01（vol.6〜10のショートを制作／実際のYouTube Studio投稿予約日をHTMLに反映）</div>
+        <div class="logbody">
+          <p><b>vol.6〜10のショートを同方針で制作</b><br>
+          ホールド核：vol.6「数え声の踏切」＝遮断機の向こうに並ぶ人影（SE：corrupt）、vol.7「奥宮の鈴」＝鈴の綱に伸びる白い手（SE：breathing）、vol.8「深夜バスの隣席」＝誰もいない座席に残る沈み跡（SE：heartbeat）、vol.9「三十三歩の地下道」＝自分ともう一対の足元（SE：breathing）、vol.10「306号室の合鍵」＝「そろそろ、鍵を返してもらう頃だと思う」の手書きメモ（SE：corrupt）。全5本とも1080x1920・約6.5秒でビルドし、ホールド／タイトルフレームを目視確認、CRF24でエンコードしfaststart化した上で書き出し済み。</p>
+          <p><b>本編投稿日を、ユーザーが実際にYouTube Studioで設定した公開予約日に合わせて修正</b><br>
+          ユーザーからチャンネルのYouTube Studio画面（サムネ・投稿予約日一覧）を共有してもらい、第一夜〜第十夜が2026-08-03〜08-12に毎日20:00で公開予約済みであることを確認。これに合わせてvol.6〜10の本編投稿日を08-08／08-09／08-10／08-11／08-12として追記し、各ショートの投稿日も同日に設定した。これで第一夜〜第十夜の本編・ショート双方の投稿日が実際のスケジュールと一致した状態になった。</p>
+        </div>
+      </div>
+
+      <div class="logentry">
+        <div class="logdate">2026-08-03（vol.11〜30 全話にコピペ欄と投稿日を追加）</div>
+        <div class="logbody">
+          <p><b>vol.11〜14（完パケ済み）にタイトル・概要欄・タグのコピペ欄を追加</b><br>
+          これまでステータス行だけだったvol.11「かたくり荘の203号室」・vol.12「4階のボタン」・vol.13「閉架書庫の一冊」・vol.14「峠の茶屋の客」に、vol.1〜10と同じ形式でコピペ欄（タイトル／概要欄／タグ）とサムネ・尺情報を追加し、ステータスを「完パケ済み」に更新した。</p>
+          <p><b>vol.15〜30（台本のみ・全16話）にもコピペ欄を先行追加</b><br>
+          tts_synth.py内の台本本文（SENTENCES）から各話の設定・忠告・第一の山の内容を読み取り、vol.1〜14と同じ文体・構成でタイトル／概要欄／タグを作成した。挿絵・本編制作前でもYouTube側の作業（タイトル確定、SEO調整の事前検討など）を先に進められるようにするのが狙い。ステータスは「台本のみ」のまま変更していない。</p>
+          <p><b>投稿日について（重要な注意）</b><br>
+          vol.1〜10は実際にYouTube Studioで公開予約済みの確定日（2026-08-03〜08-12）。vol.11〜30の投稿日は、その毎日20:00ペースをそのまま延長した場合の暫定値（vol.11=08-13〜vol.30=09-01）であり、YouTube Studio側ではまだ確定・予約されていない。誤解を避けるため、vol.11〜14は「投稿日：◯◯（予定・未確定）」、vol.15〜30は「投稿予定日：◯◯（毎日20:00ペース継続を想定した暫定予定）」とラベルを分けて表示している。実際の投稿予約が確定次第、このログと日付表示を更新すること。</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <div class="note">
+    <b>アップロード時に必ず行うこと：</b>YouTube Studioの「詳細を追加」内「改変されたコンテンツ」を必ず「はい」に設定してください。台本・音声・映像・字幕をすべて生成AIで制作しているため必須の開示です（開示した上での収益化自体は問題ありません）。タイトルは「【朗読】{サブタイトル}｜第◯夜」（漢数字・チャンネル名なし）で統一してください。上の「運営ログ」も参照し、AI量産判定を避けるための構成上の原則を各話の台本作成時に確認してください。
+  </div>
+</div>
+
+<script>
+function flashLabel(btn, label, ok){
+  const orig = btn.dataset.orig || btn.textContent;
+  btn.dataset.orig = orig;
+  btn.textContent = label;
+  btn.classList.toggle('copied', !!ok);
+  setTimeout(()=>{ btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+}
+
+function selectAll(ta){
+  ta.focus();
+  ta.select();
+  try { ta.setSelectionRange(0, ta.value.length); } catch(e){}
+}
+
+function copyField(btn){
+  const field = btn.closest('.field');
+  field.open = true; // 折りたたまれていても確実にコピー・選択できるよう開く
+  const ta = field.querySelector('textarea');
+  selectAll(ta);
+
+  // 1) Clipboard API（対応していれば最優先。file://やサンドボックス内では使えないことが多い）
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      flashLabel(btn, 'コピーしました', true);
+    }).catch(()=>{ fallbackCopy(ta, btn); });
+    return;
+  }
+  fallbackCopy(ta, btn);
+}
+
+function fallbackCopy(ta, btn){
+  // 2) execCommand（多くのサンドボックス環境でも動く）
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
+  if (ok) {
+    flashLabel(btn, 'コピーしました', true);
+  } else {
+    // 3) それも使えない環境向け：全選択状態にするので手動でコピーしてもらう
+    selectAll(ta);
+    flashLabel(btn, '選択したので⌘/Ctrl+Cでコピー', false);
+  }
+}
+
+// 目次タップで対象の話（ネストしている場合は親のグループも）を自動展開してからジャンプする
+document.querySelectorAll('.toc a').forEach(function(a){
+  a.addEventListener('click', function(){
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (!el || el.tagName !== 'DETAILS') return;
+    el.open = true;
+    let parent = el.parentElement;
+    while (parent) {
+      if (parent.tagName === 'DETAILS') { parent.open = true; }
+      parent = parent.parentElement;
+    }
+  });
+});
+</script>
+</body>
+</html>
